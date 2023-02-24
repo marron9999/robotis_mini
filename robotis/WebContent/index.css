@@ -1,0 +1,124 @@
+* {
+	user-select: none;
+}
+
+#body {
+	display: block;
+	width: calc(100%);
+	height: calc(100%);
+	position: absolute;
+	top: 0;
+	left: 0;
+}
+#head {
+	display: block;
+	width: calc(100%);
+	height: 48px;
+	line-height: 48px;
+}
+#logo {
+	display: inline-block;
+	vertical-align: middle;
+	cursor: pointer;
+}
+#logoa.a >  #logo {
+	visibility: hidden;
+}
+
+#logoa {
+	margin-left: 10px;
+	display: inline-block;
+	width: 48px;
+	height: 48px;
+}
+#logoa.a {
+	animation: logoa 5s;
+	animation-delay: 0s;
+	animation-iteration-count:infinite ;
+	background-repeat: no-repeat;
+}
+
+@keyframes logoa {
+   0% { background-image: url(./1.png); }
+  10% { background-image: url(./2.png); }
+  20% { background-image: url(./1.png); }
+  30% { background-image: url(./3.png); }
+  40% { background-image: url(./4.png); }
+  50% { background-image: url(./3.png); }
+  60% { background-image: url(./5.png); }
+  70% { background-image: url(./3.png); }
+  80% { background-image: url(./3.png); }
+  90% { background-image: url(./2.png); }
+ 100% { background-image: url(./1.png); }
+}
+
+#motion {
+	display: block;
+	margin-left: 2px;
+	margin-top: 2px;
+	border-top: 1px solid #ccc;
+	padding: 2px 4px;
+	width: calc(100% - 245px);
+	height: calc(100% - 65px);
+	float:left;
+}
+
+#motion td {
+	margin-top: 10px;
+	margin-left: 10px;
+	border: 1px solid gray;
+	border-radius: 10px;
+	padding: 4px 12px;
+	width: 160px;
+	text-align: center;
+	height: 2em;
+	cursor: pointer;
+}
+#log {
+	display: block;
+	margin-top: 2px;
+	border-left: 1px solid #ccc;
+	border-top: 1px solid #ccc;
+	padding: 2px 4px;
+	width: 225px;
+	height: calc(100% - 65px);
+	float:left;
+	word-break: break-all;
+	overflow: hidden auto;
+	font-family: monospace;
+}
+#log > div {
+	margin: 0 0;
+	padding: 2px 4px;
+}
+
+#open, #close, .m {
+	font-size: 18px;
+	line-height: 18px;
+	margin-left: 10px;
+	vertical-align: middle;
+	word-break: break-all;
+}
+
+#debug {
+	position: absolute;
+	top: 20px;
+	right: 10px;
+	font-size: 10px;
+	line-height: 10px;
+	vertical-align: middle;
+	color: #eee;
+	border: 1px solid #eee;
+	border-radius: 8px;
+	padding: 4px 8px;
+	cursor: pointer;
+}
+
+#open, #close {
+	border: 1px solid gray;
+	padding: 4px 12px;
+	padding-top: 6px;
+	border-radius: 8px;
+	display: none;
+	cursor: pointer;
+}
