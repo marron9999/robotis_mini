@@ -2,19 +2,26 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintStream;
 
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
 import jakarta.websocket.OnClose;
 import jakarta.websocket.OnError;
 import jakarta.websocket.OnMessage;
 import jakarta.websocket.OnOpen;
 import jakarta.websocket.Session;
 import jakarta.websocket.server.ServerEndpoint;
+
 import robotis.Robotis;
 import util.Util;
 
 @ServerEndpoint("/ws")
 public class WS {
 	public static Robotis robotis = null;
-	public static String buffer = "";
+	private static Session session;
+	private ExecutorService service = Executors.newCachedThreadPool();
+
+	private static String buffer = "";
 	public static void notify(Session session, String t) {
 		buffer += t;
 		t = "";
@@ -32,6 +39,7 @@ public class WS {
 			}
 		}
 	}
+
 
 	@OnOpen
 	public void onOpen(Session session) {
@@ -62,6 +70,7 @@ public class WS {
 		sendText(session, "ready robotis");
 	}
 
+	
 	private void sendText(Session session, String message) {
 		try {
 			session.getBasicRemote().sendText(message);
@@ -70,15 +79,31 @@ public class WS {
 		}
 	}
 
-	private void initialize() {
-		PrintStream _out = System.out;
-		PrintStream _err = System.err;
-		System.setOut(robotis.out);
-		System.setErr(robotis.out);
-		robotis.initialize();
-		System.setOut(_out);
-		System.setErr(_err);
+	private class initialize implements Runnable {
+		@Override
+		public void run() {
+			Session session = WS.session;
+			Thread.currentThread().setName("open_robotis");
+			PrintStream _out = System.out;
+			PrintStream _err = System.err;
+			System.setOut(robotis.out);
+			System.setErr(robotis.out);
+			robotis.initialize();
+			System.setOut(_out);
+			System.setErr(_err);
+
+			try {
+				WS.notify(session, "Connect" + robotis.bluetooth.name + "\n");
+				sendText(session, "connect " + robotis.bluetooth.name);
+			} catch (Exception e) {
+				WS.notify(session, "Fial connect\n");
+				sendText(session, "disconnect robotis");
+			}
+			Thread.currentThread().setName("-");
+			WS.session = null;
+		}
 	}
+
 
 	@OnMessage
 	public void onMessage(String message, Session session) {
@@ -108,15 +133,10 @@ public class WS {
 		}
 
 		if(ope[0].equalsIgnoreCase("open")) {
-			initialize();
-			try {
-				sendText(session, "connect " + robotis.bluetooth.name);
-				notify(session, "Connect" + robotis.bluetooth.name + "\n");
-				return;
-			} catch (Exception e) {
-				notify(session, "Fial connect\n");
+			if(WS.session == null) {
+				WS.session = session;
+				service.execute(new initialize());
 			}
-			sendText(session, "disconnect robotis");
 			return;
 		}
 
