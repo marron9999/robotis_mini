@@ -54,41 +54,62 @@
 
 #motion {
 	display: block;
-	margin-left: 2px;
-	margin-top: 2px;
 	border-top: 1px solid #ccc;
 	padding: 2px 4px;
-	width: calc(100% - 245px);
-	height: calc(100% - 65px);
-	float:left;
+	width: calc(100% - 10px);
+	height: calc(100% - 61px);
 }
 
 #motion td {
 	margin-top: 10px;
 	margin-left: 10px;
 	border: 1px solid gray;
-	border-radius: 10px;
+	border-radius: 8px;
 	padding: 4px 12px;
 	width: 160px;
 	text-align: center;
 	height: 2em;
 	cursor: pointer;
 }
-#log {
+#loga {
+	position: absolute;
+	top: 0px;
+	right: 0px;
 	display: block;
-	margin-top: 2px;
 	border-left: 1px solid #ccc;
-	border-top: 1px solid #ccc;
-	padding: 2px 4px;
-	width: 225px;
-	height: calc(100% - 65px);
-	float:left;
+	width: 300px;
+	height: 48px;
+	background: white;
+	z-index: 2;
+}
+
+#logd {
+	position: absolute;
+	top: 2px;
+	right: 1em;
+	color: gray;
+	cursor: pointer;
+	background: white;
+}
+#loge {
+	position: absolute;
+	top: 24px;
+	right: 1em;
+	color: gray;
+	cursor: pointer;
+	background: white;
+}
+
+#log {
 	word-break: break-all;
 	overflow: hidden auto;
 	font-family: monospace;
+	font-size: small;
+	height: calc(100%);
+	width: calc(100%);
 }
+
 #log > div {
-	margin: 0 0;
 	padding: 2px 4px;
 }
 
@@ -98,20 +119,6 @@
 	margin-left: 10px;
 	vertical-align: middle;
 	word-break: break-all;
-}
-
-#debug {
-	position: absolute;
-	top: 20px;
-	right: 10px;
-	font-size: 10px;
-	line-height: 10px;
-	vertical-align: middle;
-	color: #eee;
-	border: 1px solid #eee;
-	border-radius: 8px;
-	padding: 4px 8px;
-	cursor: pointer;
 }
 
 #open, #close {

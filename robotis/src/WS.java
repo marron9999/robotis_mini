@@ -9,6 +9,7 @@ import jakarta.websocket.OnOpen;
 import jakarta.websocket.Session;
 import jakarta.websocket.server.ServerEndpoint;
 import robotis.Robotis;
+import util.Util;
 
 @ServerEndpoint("/ws")
 public class WS {
@@ -56,79 +57,76 @@ public class WS {
 			} catch (Exception e) {
 				// NONE
 			}
-			PrintStream _out = System.out;
-			PrintStream _err = System.err;
-			System.setOut(robotis.out);
-			System.setErr(robotis.out);
-			robotis.initialize();
-			System.setOut(_out);
-			System.setErr(_err);
+			//initialize();
 		}
+		sendText(session, "ready robotis");
+	}
+
+	private void sendText(Session session, String message) {
 		try {
-			session.getBasicRemote().sendText("ready " + robotis.bluetooth.name);
+			session.getBasicRemote().sendText(message);
 		} catch (Exception e) {
 			// NONE
 		}
+	}
+
+	private void initialize() {
+		PrintStream _out = System.out;
+		PrintStream _err = System.err;
+		System.setOut(robotis.out);
+		System.setErr(robotis.out);
+		robotis.initialize();
+		System.setOut(_out);
+		System.setErr(_err);
 	}
 
 	@OnMessage
 	public void onMessage(String message, Session session) {
 		//System.out.println("onMessage: " + session.toString() + ": " + message);
 		String[] ope = message.split(" ");
+
 		if(ope[0].equalsIgnoreCase("motion")) {
-			try {
-			} catch (Exception e) {
-				// NONE
-			}
-			try {
-				int no = Integer.parseInt(ope[1]);
-				String t = robotis.properties.getProperty("motion." + no, null);
-				session.getBasicRemote().sendText("motion " + t);
-				robotis.motion(no);
-			} catch (Exception e) {
-				// NONE
-			}
-			try {
-				session.getBasicRemote().sendText("motion end");
-			} catch (Exception e) {
-				// NONE
-			}
+			int no = Util.parseInt(ope[1]);
+			String t = robotis.properties.getProperty("motion." + no, null);
+			sendText(session, "motion " + t);
+			robotis.motion(no);
+			sendText(session, "motion end");
 			return;
 		}
+
 		if(ope[0].equalsIgnoreCase("motions")) {
-			try {
-				session.getBasicRemote().sendText("motions [");
-				int no = 0;
-				while(true) {
-					String t = robotis.properties.getProperty("motion." + no, null);
-					if(t == null) break;
-					session.getBasicRemote().sendText("motions " + no + " " + t);
-					no++;
-				}
-				session.getBasicRemote().sendText("motions ]");
-			} catch (Exception e) {
-				// NONE
+			sendText(session, "motions [");
+			int no = 0;
+			while(true) {
+				String t = robotis.properties.getProperty("motion." + no, null);
+				if(t == null) break;
+				sendText(session, "motions " + no + " " + t);
+				no++;
 			}
+			sendText(session, "motions ]");
 			return;
 		}
+
 		if(ope[0].equalsIgnoreCase("open")) {
-			robotis.initialize();
+			initialize();
 			try {
-				session.getBasicRemote().sendText("connect robotis");
+				sendText(session, "connect " + robotis.bluetooth.name);
+				notify(session, "Connect" + robotis.bluetooth.name + "\n");
+				return;
 			} catch (Exception e) {
-				// NONE
+				notify(session, "Fial connect\n");
 			}
+			sendText(session, "disconnect robotis");
 			return;
 		}
+
 		if(ope[0].equalsIgnoreCase("close")) {
 			robotis.close();
-			try {
-				session.getBasicRemote().sendText("disconnect robotis");
-			} catch (Exception e) {
-				// NONE
-			}
+			sendText(session, "disconnect robotis");
+			notify(session, "Disconnect  robotis\n");
 			return;
 		}
+
 		if(ope[0].equalsIgnoreCase("verbose")) {
 			if(ope[1].equalsIgnoreCase("0"))
 				robotis.VERBOSE = false;

@@ -21,7 +21,7 @@ public class Robotis {
 	public boolean VERBOSE = false;
 	public int internal_sleep = 100;
 	public int timeout_packet = 1000;
-	public int timeout_motion = 2000;
+	public int timeout_motion = 3000;
 
 	public void verbose_packet(byte[] buffer, int length)  {
 		String str = PACKET.format(buffer, length);

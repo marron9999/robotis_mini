@@ -48,6 +48,33 @@ public class Util {
 		return false;
 	}
 
+	public static double parseDouble(String value) {
+		try {
+			return Double.parseDouble(value.trim());
+		} catch (Exception e) {
+			// NONE
+		}
+		return 0;
+	}
+
+	public static int parseInt(String value) {
+		try {
+			return Integer.parseInt(value.trim());
+		} catch (Exception e) {
+			// NONE
+		}
+		return 0;
+	}
+
+	public static boolean parseBoolean(String value) {
+		try {
+			return Boolean.parseBoolean(value.trim());
+		} catch (Exception e) {
+			// NONE
+		}
+		return false;
+	}
+	
 	public static String double2string(double v) {
 		String d = "" + v;
 		int p = d.indexOf(".");

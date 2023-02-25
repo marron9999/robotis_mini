@@ -13,14 +13,13 @@
 
 【【【 robotis 】】】
 
-・ Websocket Server
-・ bluecove 2.1.0
+- Websocket Server
+- bluecove 2.1.0
 
 【【【 ブラウザ側 】】】
 
 - CSS
 - HTML5
-	- canvas
 	- image
 	- div/span他
 - JavaScript

@@ -76,8 +76,7 @@ public class Bluecove  implements DiscoveryListener {
 	@Override
 	public void deviceDiscovered(RemoteDevice btDevice, DeviceClass cod) {
 		try {
-			Robotis.instance.info("deviceDiscovered", btDevice.getBluetoothAddress()
-						+ " (" + btDevice.getFriendlyName(false) + ")");
+			Robotis.instance.println("Find " + btDevice.getBluetoothAddress());
 		} catch (Exception e) {
 			// NONE
 		}
@@ -124,7 +123,7 @@ public class Bluecove  implements DiscoveryListener {
 
 	protected Vector<String> services(RemoteDevice rd, UUID uuids[]) throws Exception {
 		services = new Vector<String>();
-		Robotis.instance.info("bluecove.services", rd.getFriendlyName(false));
+		Robotis.instance.println("Detect " + rd.getFriendlyName(false));
 		agent.searchServices(null, uuids, rd, this);
 		synchronized (lock) {
 			try {
@@ -161,7 +160,7 @@ public class Bluecove  implements DiscoveryListener {
 			Properties properties = Util.loadProperties(PROPFILE);
 			Bluetooth bluecove = new Bluetooth();
 			if(bluecove.open(BT_PREFIX, BT_UUID)) {
-				System.out.println("Connect  successful");
+				System.out.println("Connect successful");
 			}
 			if(bluecove.stream != null) {
 				bluecove.stream.close();

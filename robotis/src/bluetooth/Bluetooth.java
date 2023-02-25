@@ -38,7 +38,7 @@ public class Bluetooth extends Bluecove {
 						this.name = device.getFriendlyName(true);
 						this.address = device.getBluetoothAddress();
 						this.url = url;
-						Robotis.instance.info("bluetooth.open", this.url);
+						Robotis.instance.println("Open " + this.url);
 						//Robotis.info("name", this.name);
 						return true;
 					}
@@ -47,7 +47,7 @@ public class Bluetooth extends Bluecove {
 		} catch (Exception e) {
 			Robotis.instance.error("bluetooth.open.", e);
 		}
-		Robotis.instance.info("bluetooth.open",  "No device");
+		Robotis.instance.println("No device");
 		return false;
 	}
 
