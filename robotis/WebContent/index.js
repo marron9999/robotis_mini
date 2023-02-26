@@ -57,12 +57,12 @@ function ready(/*m*/) {
 	ws.send("motions");
 }
 function connect(m) {
-	E("open").style.display = null;
+	E("open").style.display = "none";
 	E("close").style.display = "inline-block";
 	document.title = m;
 }
 function disconnect(/*m*/) {
-	E("close").style.display = null;
+	E("close").style.display = "none";
 	E("open").style.display = "inline-block";
 }
 
@@ -132,7 +132,7 @@ function _motion(e) {
 function _voice() {
 	voice = (voice + 1) % 2;
 	if(voice == 0) {
-		E("reset").style.display = null;
+		E("reset").style.display = "none";
 		E("logo").style.background = "white";
 		recognition.repeat = false;
 		recognition.abort();
@@ -150,8 +150,13 @@ function _resete(ee, c) {
 	ee.className = c;
 	let m = ee.textContent;
 	let s = "";
-	for(let p = 0; p<m.length; p++)
-		s += "<n>" + m[p] + "</n>";
+	if(c == "s") {
+		for(let p = 0; p<m.length; p++)
+			s += "<r>" + m[p] + "</r>";
+	} else {
+		for(let p = 0; p<m.length; p++)
+			s += "<n>" + m[p] + "</n>";
+	}
 	ee.innerHTML = s;
 }
 function _reset(c) {
@@ -227,8 +232,28 @@ function _recognition(s) {
 	if(s.indexOf("リセ") >= 0
 	|| s.indexOf("セット") >= 0
 	) {
+		recognition.parse = function() {};
 		_reset();
+		message("リセット");
 		return;
+	}
+	if(s.indexOf("接続") >= 0) {
+		if(E("open").style.display != "none") {
+			recognition.parse = function() {};
+			_reset();
+			message("接続");
+			_open();
+			return;
+		}
+	}
+	if(s.indexOf("切断") >= 0) {
+		if(E("close").style.display != "none") {
+			recognition.parse = function() {};
+			_reset();
+			message("切断");
+			_close();
+			return;
+		}
 	}
 	let select = function(es, s) {
 		let b = false;
@@ -262,18 +287,24 @@ function _recognition(s) {
 	} else {
 		select(ems, s);
 	}
-	es = E("motion").getElementsByClassName("s");
-	if(es.length > 0) {
-		for(let ei = 0; ei<es.length; ei ++) {
-			if(es[ei].innerHTML.indexOf("<n>") < 0) {
-				_motion(es[ei]);
+	ess = E("motion").getElementsByClassName("s");
+	if(ess.length > 0) {
+		for(let ei = 0; ei<ess.length; ei ++) {
+			if(ess[ei].innerHTML.indexOf("<n>") < 0) {
 				recognition.parse = function() {};
+				let ee = ess[ei];
+				_reset("n");
+				_resete(ee, "s");
+				_motion(ee);
 				return;
 			}
 		}
-		if(es.length == 1) {
-			_motion(es[0]);
+		if(ess.length == 1) {
 			recognition.parse = function() {};
+			let ee = ess[0];
+			_reset("n");
+			_resete(ee, "s");
+			_motion(ee);
 			return;
 		}
 	}
