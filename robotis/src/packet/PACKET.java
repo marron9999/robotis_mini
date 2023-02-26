@@ -64,12 +64,12 @@ public class PACKET {
 				continue;
 			}
 			read_buffer[read_length++] = robotis.bluetooth.read();
+			endTime = System.currentTimeMillis() + robotis.timeout_packet;
 			if(read_length == (PACKET._HEADER0 + 1)) {
 				if(read_buffer[PACKET._HEADER0] != PACKET.HEADER0_FF) {
 					robotis.verbose_packet(read_buffer, read_length);
 					length = -1;
 					read_length = 0;
-					endTime = System.currentTimeMillis() + robotis.timeout_packet;
 					continue;
 				}
 			} else if(read_length == (PACKET._HEADER1 + 1)) {
@@ -77,7 +77,6 @@ public class PACKET {
 					robotis.verbose_packet(read_buffer, read_length);
 					length = -1;
 					read_length = 0;
-					endTime = System.currentTimeMillis() + robotis.timeout_packet;
 					continue;
 				}
 			} else if(read_length == (PACKET._HEADER2 + 1)) {
@@ -85,7 +84,6 @@ public class PACKET {
 					robotis.verbose_packet(read_buffer, read_length);
 					length = -1;
 					read_length = 0;
-					endTime = System.currentTimeMillis() + robotis.timeout_packet;
 					continue;
 				}
 			} else if(read_length == (PACKET._RESERVED + 1)) {
@@ -93,7 +91,6 @@ public class PACKET {
 					robotis.verbose_packet(read_buffer, read_length);
 					length = -1;
 					read_length = 0;
-					endTime = System.currentTimeMillis() + robotis.timeout_packet;
 					continue;
 				}
 			} else if(read_length == (PACKET._LENGTH_H + 1)) {

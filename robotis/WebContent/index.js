@@ -242,7 +242,7 @@ function _recognition(s) {
 			recognition.parse = function() {};
 			_reset();
 			message("接続");
-			_open();
+			_connect();
 			return;
 		}
 	}
@@ -251,7 +251,7 @@ function _recognition(s) {
 			recognition.parse = function() {};
 			_reset();
 			message("切断");
-			_close();
+			_disconnect();
 			return;
 		}
 	}
