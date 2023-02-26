@@ -71,9 +71,8 @@ public class Robotis {
 			write_word(CM904.ID, CM904._MotionPlayPage[0], no);
 			sleep_timeout(internal_sleep);
 			while(true) {
-				if(read_byte(CM904.ID, CM904._MotionPlayStatus[0])) {
-					if(PACKET.data_byte(0) == 0) break;
-				}
+				byte rc = read_byte(CM904.ID, CM904._MotionPlayStatus[0], (byte) 0);
+				if(rc == 0) break;
 				sleep_timeout(internal_sleep);
 				if(endTime > 0) {
 					if(System.currentTimeMillis() >= endTime) break;
@@ -124,10 +123,9 @@ public class Robotis {
 		if(bluetooth == null) return;
 		synchronized (bluetooth) {
 			try {
-				if(read_byte(CM904.ID, CM904._MotionPlayStatus[0])) {
-					if(PACKET.data_byte(0) != 0) {
-						motion(MOTION.STOP);
-					}
+				byte rc = read_byte(CM904.ID, CM904._MotionPlayStatus[0], (byte) 0);
+				if(rc != 0) {
+					motion(MOTION.STOP);
 				}
 				motion(MOTION.SIT_DOWN, timeout_motion);
 			} catch (Exception e) {
@@ -234,39 +232,52 @@ public class Robotis {
 //		syncread_param(address, 2, params);
 //	}
 	
-	public boolean read_word(byte id, int address) throws Exception {
-		return read_length(id, address, 2);
+	public int read_word(byte id, int address, int defvalue) throws Exception {
+		if( ! read_length(id, address, 2))
+			return defvalue;
+		return PACKET.data_word(0);
 	}
-	public boolean read_byte(byte id, int address) throws Exception {
-		return read_length(id, address, 1);
+	public byte read_byte(byte id, int address, byte defvalue) throws Exception {
+		if( ! read_length(id, address, 1))
+			return defvalue;
+		return PACKET.data_byte(0);
 	}
-	public boolean read_length(byte id, int address, int read_length) throws Exception {
-		if (this.bluetooth == null) return false;
-		if( ! this.bluetooth.isWritable()) return false;
-		int length = PACKET.buffer_read(id, address, read_length);
-		verbose_packet(PACKET.write_buffer, length);
-		this.bluetooth.write(PACKET.write_buffer, length);
-		sleep_timeout(internal_sleep);
-		return PACKET.read_status();
+	private boolean read_length(byte id, int address, int read_length) throws Exception {
+		synchronized (PACKET.write_buffer) {
+			if (this.bluetooth == null) return false;
+			if( ! this.bluetooth.isWritable()) return false;
+			int length = PACKET.buffer_read(id, address, read_length);
+			verbose_packet(PACKET.write_buffer, length);
+			this.bluetooth.clear();
+			this.bluetooth.write(PACKET.write_buffer, length);
+			sleep_timeout(internal_sleep);
+			return PACKET.read_status();
+		}
 	}
 
 	public boolean write_byte(byte id, int address, byte value) throws Exception {
-		if (this.bluetooth == null) return false;
-		if( ! this.bluetooth.isWritable()) return false;
-		int length = PACKET.buffer_write_byte(id, address, value);
-		verbose_packet(PACKET.write_buffer, length);
-		this.bluetooth.write(PACKET.write_buffer, length);
-		sleep_timeout(internal_sleep);
-		return PACKET.read_status();
+		synchronized (PACKET.write_buffer) {
+			if (this.bluetooth == null) return false;
+			if( ! this.bluetooth.isWritable()) return false;
+			int length = PACKET.buffer_write_byte(id, address, value);
+			verbose_packet(PACKET.write_buffer, length);
+			this.bluetooth.clear();
+			this.bluetooth.write(PACKET.write_buffer, length);
+			sleep_timeout(internal_sleep);
+			return true; // PACKET.read_status();
+		}
 	}
 	public boolean write_word(byte id, int address, int value) throws Exception {
-		if (this.bluetooth == null) return false;
-		if( ! this.bluetooth.isWritable()) return false;
-		int length = PACKET.buffer_write_word(id, address, value);
-		verbose_packet(PACKET.write_buffer, length);
-		this.bluetooth.write(PACKET.write_buffer, length);
-		sleep_timeout(internal_sleep);
-		return PACKET.read_status();
+		synchronized (PACKET.write_buffer) {
+			if (this.bluetooth == null) return false;
+			if( ! this.bluetooth.isWritable()) return false;
+			int length = PACKET.buffer_write_word(id, address, value);
+			verbose_packet(PACKET.write_buffer, length);
+			this.bluetooth.clear();
+			this.bluetooth.write(PACKET.write_buffer, length);
+			sleep_timeout(internal_sleep);
+			return true; // PACKET.read_status();
+		}
 	}
 
 //	public void syncwrite_param(int address, SyncWriteParam... syncWriteParams) throws Exception {

@@ -113,7 +113,7 @@
 	padding: 2px 4px;
 }
 
-#open, #close, .m {
+#open, #close, #reset, .m, .n, .s {
 	font-size: 18px;
 	line-height: 18px;
 	margin-left: 10px;
@@ -121,11 +121,28 @@
 	word-break: break-all;
 }
 
-#open, #close {
+.n {
+	cursor: default;
+	color: #bbb;
+	background: #ddd;
+}
+
+.s {
+	background: #fcc;
+}
+
+#open, #close, #reset {
 	border: 1px solid gray;
 	padding: 4px 12px;
 	padding-top: 6px;
 	border-radius: 8px;
 	display: none;
 	cursor: pointer;
+}
+
+r {
+	color: red;
+}
+n {
+	color: black;
 }

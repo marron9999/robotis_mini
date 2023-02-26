@@ -79,6 +79,14 @@ public class Bluetooth extends Bluecove {
 		}
 	}
 
+	public void clear() throws Exception {
+		if (this.input != null ) {
+			while (this.input.available() > 0) {
+				this.input.read();
+			}
+		}
+	}
+
 	public void write(byte[] buffer, int length) throws Exception {
 		if (this.output != null) {
 			this.output.write(buffer, 0, length);
@@ -101,8 +109,7 @@ public class Bluetooth extends Bluecove {
 	}
 
 	public boolean isWritable() throws Exception {
-		if( this.stream == null
-		|| this.output == null) {
+		if(this.output == null) {
 			return false;
 		}
 		return true;

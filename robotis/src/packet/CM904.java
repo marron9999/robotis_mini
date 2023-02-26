@@ -8,15 +8,15 @@ public class CM904 {
 	public static final byte ID = (byte) 200;
 
 //	// EEPROM
-//	public static final byte[] _ModelNumber = {0, 2};	// モデル番号	R	400
-//	public static final byte[] _FirmwareVersion = {6, 1};	// ファームウェア バージョン	R	-
-//	public static final byte[] _ID = {7, 1};				// コントローラID	RW	200
-//	public static final byte[] _BaudRate = {8, 1};			// 通信ボーレート	R	1
-//	public static final byte[] _ReturnDelayTime= {9, 1};	// 応答待ち時間	RW	0
-//	public static final byte[] _StatusReturnLevel = {10, 1};	// リターンパケットのレベル選択	RW	2
-//	public static final byte[] _BootloaderVersion = {11, 1};	// ブートローダ バージョン	R	-
-//	public static final byte[] _DXLBaudRate = {12, 1};		// DYNAMIXELとの通信ボーレート	RW	3
-//	public static final byte[] _DYNAMIXELChannel = {16, 1};	// DYNAMIXELとの通信ポート選択	RW	0
+	public static final byte[] _ModelNumber = {0, 2};		// モデル番号	R	400
+	public static final byte[] _FirmwareVersion = {6, 1};	// ファームウェア バージョン	R	-
+	public static final byte[] _ID = {7, 1};				// コントローラID	RW	200
+	public static final byte[] _BaudRate = {8, 1};			// 通信ボーレート	R	1
+	public static final byte[] _ReturnDelayTime= {9, 1};	// 応答待ち時間	RW	0
+	public static final byte[] _StatusReturnLevel = {10, 1};	// リターンパケットのレベル選択	RW	2
+	public static final byte[] _BootloaderVersion = {11, 1};	// ブートローダ バージョン	R	-
+	public static final byte[] _DXLBaudRate = {12, 1};		// DYNAMIXELとの通信ボーレート	RW	3
+	public static final byte[] _DYNAMIXELChannel = {16, 1};	// DYNAMIXELとの通信ポート選択	RW	0
 
 	// RAM
 	public static final int[] _ModeNumber = {21, 1};		// 動作モード	RW	-
