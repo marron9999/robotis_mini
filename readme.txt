@@ -4,8 +4,8 @@
 
 ■ 使うには
 
-準備 1)　Open JDK 11以上の 32 bit 版を用意します。
-準備 2)　Java EEサーバー（Tomcat 10.0)等の 32 bit 版を用意します。
+準備 1)　Open JDK 11以上の 64bit版 または 32bit版 を用意します。
+準備 2)　Java EEサーバー（Tomcat 10.0)等を用意します。
 準備 3)　Java EEサーバーに robotis を配置します。
 準備 4)　Java EEサーバーを起動します。
 
@@ -14,7 +14,7 @@
 【【【 robotis 】】】
 
 - Websocket Server
-- bluecove 2.1.0
+- bluecove 2.1.1
 
 【【【 ブラウザ側 】】】
 
@@ -24,3 +24,4 @@
 	- div/span他
 - JavaScript
 	- WebSocket
+	- SpeechRecognition
