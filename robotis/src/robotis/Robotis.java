@@ -264,7 +264,7 @@ public class Robotis {
 			this.bluetooth.clear();
 			this.bluetooth.write(PACKET.write_buffer, length);
 			sleep_timeout(internal_sleep);
-			return true; // PACKET.read_status();
+			return PACKET.read_status();
 		}
 	}
 	public boolean write_word(byte id, int address, int value) throws Exception {
@@ -276,7 +276,7 @@ public class Robotis {
 			this.bluetooth.clear();
 			this.bluetooth.write(PACKET.write_buffer, length);
 			sleep_timeout(internal_sleep);
-			return true; // PACKET.read_status();
+			return PACKET.read_status();
 		}
 	}
 

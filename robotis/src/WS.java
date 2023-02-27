@@ -93,7 +93,7 @@ public class WS {
 			System.setErr(_err);
 
 			try {
-				WS.notify(session, "Connect" + robotis.bluetooth.name + "\n");
+				WS.notify(session, "Connect " + robotis.bluetooth.name + "\n");
 				sendText(session, "connect " + robotis.bluetooth.name);
 			} catch (Exception e) {
 				WS.notify(session, "Fial connect\n");
