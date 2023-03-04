@@ -1,6 +1,7 @@
 package robotis;
 
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.PrintStream;
 import java.util.Properties;
 
@@ -38,7 +39,9 @@ public class Robotis {
 		} catch (Exception e) {
 			try {
 				InputStream is = getClass().getResourceAsStream("/robotis/" + PROPFILE);
-				properties.load(is);
+				InputStreamReader isr = new InputStreamReader(is, "utf-8");
+				properties.load(isr);
+				isr.close();
 				is.close();
 			} catch (Exception e2) {
 				// NONE

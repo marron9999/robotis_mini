@@ -1,7 +1,8 @@
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintStream;
-
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -121,12 +122,34 @@ public class WS {
 
 		if(ope[0].equalsIgnoreCase("motions")) {
 			sendText(session, "motions [");
+			List<String> ts = new ArrayList<>();
 			int no = 0;
 			while(true) {
 				String t = robotis.properties.getProperty("motion." + no, null);
 				if(t == null) break;
-				sendText(session, "motions " + no + " " + t);
+				ts.add(t);
 				no++;
+			}
+			for(String s : robotis.properties.getProperty("motions", "").split(" ")) {
+				try {
+					s = s.trim();
+					if(s.length() > 0) {
+						no = Integer.parseInt(s);
+						String t = ts.get(no);
+						if(t.length() > 0) {
+							sendText(session, "motions " + no + " " + t);
+							ts.set(no, "");
+						}
+					}
+					
+				} catch (Exception e) {
+					// NONE
+				}
+			}
+			for(no = 0; no < ts.size(); no++) {
+				String t = ts.get(no);
+				if(t.length() > 0)
+					sendText(session, "motions " + no + " " + t);
 			}
 			sendText(session, "motions ]");
 			return;

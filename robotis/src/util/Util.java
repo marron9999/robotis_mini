@@ -3,6 +3,7 @@ package util;
 import java.awt.event.KeyEvent;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.InputStreamReader;
 import java.util.Properties;
 
 import org.w3c.dom.NamedNodeMap;
@@ -184,7 +185,9 @@ public class Util {
 	public static Properties loadProperties(String propfile) throws Exception {
 		Properties properties = new Properties();
 		FileInputStream fis = new FileInputStream(propfile);
-		properties.load(fis);
+		InputStreamReader isr = new InputStreamReader(fis, "utf-8");
+		properties.load(isr);
+		isr.close();
 		fis.close();
 		return properties;
 	}

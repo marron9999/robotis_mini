@@ -94,33 +94,35 @@
     </Flow>
     <Flow name="右向け右" return="-1">
       <units>
-        <unit main="右向け右" mainSpeed="1" loop="1" exit="" exitSpeed="1" callSite="False" />
+        <unit main="右向け右" mainSpeed="1.1" loop="3" exit="" exitSpeed="1" callSite="False" />
       </units>
     </Flow>
     <Flow name="左向け左" return="-1">
       <units>
-        <unit main="左向け左" mainSpeed="1" loop="1" exit="" exitSpeed="1" callSite="False" />
+        <unit main="左向け左" mainSpeed="1.1" loop="3" exit="" exitSpeed="1" callSite="False" />
       </units>
     </Flow>
     <Flow name="右へ" return="-1">
       <units>
-        <unit main="右へ" mainSpeed="1" loop="1" exit="" exitSpeed="1" callSite="False" />
+        <unit main="右へ" mainSpeed="1" loop="3" exit="" exitSpeed="1" callSite="False" />
+        <unit main="初期姿勢" mainSpeed="3" loop="1" exit="" exitSpeed="1" callSite="False" />
       </units>
     </Flow>
     <Flow name="左へ" return="-1">
       <units>
-        <unit main="左へ" mainSpeed="1" loop="1" exit="" exitSpeed="1" callSite="False" />
+        <unit main="左へ" mainSpeed="1" loop="3" exit="" exitSpeed="1" callSite="False" />
+        <unit main="初期姿勢" mainSpeed="3" loop="1" exit="" exitSpeed="1" callSite="False" />
       </units>
     </Flow>
     <Flow name="先進" return="-1">
       <units>
-        <unit main="先進" mainSpeed="1.1" loop="3" exit="" exitSpeed="1" callSite="False" />
-        <unit main="先進2" mainSpeed="1.1" loop="1" exit="" exitSpeed="1" callSite="False" />
+        <unit main="先進" mainSpeed="1" loop="3" exit="" exitSpeed="1" callSite="False" />
+        <unit main="先進2" mainSpeed="1" loop="1" exit="" exitSpeed="1" callSite="False" />
       </units>
     </Flow>
     <Flow name="後進" return="-1">
       <units>
-        <unit main="後進" mainSpeed="1.1" loop="3" exit="" exitSpeed="1" callSite="False" />
+        <unit main="後進" mainSpeed="1" loop="3" exit="" exitSpeed="1" callSite="False" />
         <unit main="後進2" mainSpeed="1" loop="1" exit="" exitSpeed="1" callSite="False" />
       </units>
     </Flow>
@@ -232,7 +234,7 @@
     </Flow>
     <Flow name="早い先進 2" return="-1">
       <units>
-        <unit main="早い先進 2" mainSpeed="2" loop="1" exit="" exitSpeed="1" callSite="False" />
+        <unit main="早い先進" mainSpeed="2" loop="8" exit="早い先進 2" exitSpeed="2" callSite="False" />
       </units>
     </Flow>
     <Flow name="ビーボーイ 1" return="-1">
@@ -254,7 +256,6 @@
         <unit main="乗馬ダンス 3" mainSpeed="0.7" loop="1" exit="" exitSpeed="1" callSite="False" />
         <unit main="乗馬ダンス 4" mainSpeed="0.7" loop="1" exit="" exitSpeed="1" callSite="False" />
         <unit main="乗馬ダンス 5" mainSpeed="0.7" loop="1" exit="" exitSpeed="1" callSite="False" />
-        <unit main="乗馬ダンス 6" mainSpeed="0.7" loop="1" exit="" exitSpeed="1" callSite="False" />
         <unit main="乗馬ダンス 7" mainSpeed="0.7" loop="1" exit="" exitSpeed="1" callSite="False" />
         <unit main="乗馬ダンス 8" mainSpeed="0.7" loop="1" exit="" exitSpeed="1" callSite="False" />
         <unit main="乗馬ダンス 9" mainSpeed="0.7" loop="1" exit="" exitSpeed="1" callSite="False" />
@@ -406,21 +407,21 @@
       </steps>
     </Page>
     <Page name="右へ">
-      <param compileSize="1" acceleration="32" softness="7 7 7 7 7 7 4 4 4 4 4 4 4 4 4 4 5" />
+      <param compileSize="1" acceleration="32" softness="4 4 4 4 4 4 3 3 3 3 3 3 3 3 3 3 5" />
       <steps>
-        <step frame="3" pose="0 0 -73.24 53.24 0 0 -11 19 -31.37 26.37 39.3 -29.3 18.18 -13.18 0 2 0" />
-        <step frame="6" pose="0 0 -73.24 53.24 0 0 -11 19 -31.37 26.37 39.3 -29.3 18.18 -13.18 0 2 0" />
-        <step frame="12" pose="0 0 -73.24 53.24 0 0 -1 19 -31.37 26.37 39.3 -29.3 18.18 -13.18 -4.06 22.56 0" />
-        <step frame="15" pose="0 0 -73.24 73.24 0 0 0 0 -26.37 26.37 29.3 -29.3 13.18 -13.18 0 0 0" />
+        <step frame="12" pose="0 0 -73.24 73.24 0 0 -11.72 11.72 -35.16 26.37 46.88 -29.3 21.97 -13.18 0 0 0" />
+        <step frame="13" pose="0 0 -73.24 73.24 0 0 -11.72 11.72 -35.16 26.37 46.88 -29.3 21.97 -13.18 0 0 0" />
+        <step frame="22" pose="0 0 -73.24 73.24 0 0 0 0 -26.37 26.37 29.3 -29.3 13.18 -13.18 0 0 0" />
+        <step frame="25" pose="0 0 -73.24 73.24 0 0 0 0 -26.37 26.37 29.3 -29.3 13.18 -13.18 0 0 0" />
       </steps>
     </Page>
     <Page name="左へ">
-      <param compileSize="1" acceleration="32" softness="7 7 7 7 7 7 4 4 4 4 4 4 4 4 4 4 5" />
+      <param compileSize="1" acceleration="32" softness="4 4 4 4 4 4 3 3 3 3 3 3 3 3 3 3 5" />
       <steps>
-        <step frame="3" pose="0 0 -53.24 73.24 0 0 -19 11 -26.37 31.37 29.3 -39.3 13.18 -18.18 -2 0 0" />
-        <step frame="6" pose="0 0 -53.24 73.24 0 0 -19 11 -26.37 31.37 29.3 -39.3 13.18 -18.18 -2 0 0" />
-        <step frame="12" pose="0 0 -53.24 73.24 0 0 -19 1 -26.37 31.37 29.3 -39.3 13.18 -18.18 -22.56 4.06 0" />
-        <step frame="15" pose="0 0 -73.24 73.24 0 0 0 0 -26.37 26.37 29.3 -29.3 13.18 -13.18 0 0 0" />
+        <step frame="12" pose="-0.29 -0.29 -73.54 72.95 -0.29 -0.29 -12.01 11.43 -26.66 34.86 29 -47.17 12.89 -22.27 -0.29 -0.29 0" />
+        <step frame="13" pose="-0.29 -0.29 -73.54 72.95 -0.29 -0.29 -12.01 11.43 -26.66 34.86 29 -47.17 12.89 -22.27 -0.29 -0.29 0" />
+        <step frame="22" pose="0 0 -73.24 73.24 0 0 0 0 -26.37 26.37 29.3 -29.3 13.18 -13.18 0 0 0" />
+        <step frame="27" pose="0 0 -73.24 73.24 0 0 0 0 -26.37 26.37 29.3 -29.3 13.18 -13.18 0 0 0" />
       </steps>
     </Page>
     <Page name="先進">
@@ -813,7 +814,7 @@
       </steps>
     </Page>
     <Page name="乗馬ダンス 3">
-      <param compileSize="2" acceleration="32" softness="4 4 4 4 4 4 5 5 4 4 4 4 4 4 6 6 5" />
+      <param compileSize="1" acceleration="32" softness="4 4 4 4 4 4 5 5 4 4 4 4 4 4 6 6 5" />
       <steps>
         <step frame="12" pose="71.19 -93.75 -94.04 91.41 -85.84 90.53 5.86 29.3 -20.51 23.14 34.86 -41.02 18.75 -19.04 8.79 8.79 0" />
         <step frame="24" pose="50.39 -68.85 -98.73 105.18 -39.55 36.33 -11.72 11.72 -20.51 29 34.86 -52.73 18.75 -19.04 0 8.79 0" />
@@ -826,7 +827,7 @@
       </steps>
     </Page>
     <Page name="乗馬ダンス 4">
-      <param compileSize="2" acceleration="32" softness="4 4 4 4 4 4 5 5 4 4 4 4 4 4 6 6 5" />
+      <param compileSize="1" acceleration="32" softness="4 4 4 4 4 4 5 5 4 4 4 4 4 4 6 6 5" />
       <steps>
         <step frame="12" pose="71.19 -93.75 -94.04 91.41 -85.84 90.53 -29.59 -6.15 -23.44 20.21 40.72 -35.16 18.75 -19.04 -9.08 -9.08 0" />
         <step frame="24" pose="50.39 -68.85 -98.73 105.18 -39.55 36.33 -12.01 11.43 -29.3 20.21 52.44 -35.16 18.75 -19.04 -9.08 -0.29 0" />
@@ -852,7 +853,7 @@
       </steps>
     </Page>
     <Page name="乗馬ダンス 6">
-      <param compileSize="2" acceleration="32" softness="4 4 4 4 4 4 5 5 4 4 4 4 4 4 6 6 5" />
+      <param compileSize="1" acceleration="32" softness="4 4 4 4 4 4 5 5 4 4 4 4 4 4 6 6 5" />
       <steps>
         <step frame="12" pose="149.71 -70.61 -26.95 98.14 -100.78 70.61 -29.59 -6.15 -23.44 20.21 40.72 -35.16 18.75 -19.04 -9.08 -9.08 0" />
         <step frame="24" pose="149.71 -70.61 -85.25 98.14 -24.02 70.61 -12.01 11.43 -29.3 20.21 52.44 -35.16 18.75 -19.04 -9.08 -0.29 0" />
@@ -865,7 +866,7 @@
       </steps>
     </Page>
     <Page name="乗馬ダンス 7">
-      <param compileSize="2" acceleration="32" softness="4 4 4 4 4 4 5 5 4 4 4 4 4 4 6 6 5" />
+      <param compileSize="1" acceleration="32" softness="4 4 4 4 4 4 5 5 4 4 4 4 4 4 6 6 5" />
       <steps>
         <step frame="12" pose="149.71 -70.61 -26.95 98.14 -100.78 70.61 -29.59 -6.15 -23.44 20.21 40.72 -35.16 18.75 -19.04 -9.08 -9.08 0" />
         <step frame="24" pose="149.71 -70.61 -85.25 98.14 -24.02 70.61 -12.01 11.43 -29.3 20.21 52.44 -35.16 18.75 -19.04 -9.08 -0.29 0" />
@@ -878,7 +879,7 @@
       </steps>
     </Page>
     <Page name="乗馬ダンス 8">
-      <param compileSize="2" acceleration="32" softness="4 4 4 4 4 4 5 5 4 4 4 4 4 4 6 6 5" />
+      <param compileSize="1" acceleration="32" softness="4 4 4 4 4 4 5 5 4 4 4 4 4 4 6 6 5" />
       <steps>
         <step frame="12" pose="149.71 -70.61 -26.95 98.14 -100.78 70.61 5.86 29.3 -20.51 23.14 34.86 -41.02 18.75 -19.04 8.79 8.79 0" />
         <step frame="24" pose="149.71 -70.61 -85.25 98.14 -24.02 70.61 -11.72 11.72 -20.51 29 34.86 -52.73 18.75 -19.04 0 8.79 0" />
@@ -891,7 +892,7 @@
       </steps>
     </Page>
     <Page name="乗馬ダンス 9">
-      <param compileSize="2" acceleration="32" softness="4 4 4 4 4 4 5 5 4 4 4 4 4 4 6 6 5" />
+      <param compileSize="1" acceleration="32" softness="4 4 4 4 4 4 5 5 4 4 4 4 4 4 6 6 5" />
       <steps>
         <step frame="12" pose="149.71 -70.61 -26.95 98.14 -100.78 70.61 5.86 29.3 -20.51 23.14 34.86 -41.02 18.75 -19.04 8.79 8.79 0" />
         <step frame="24" pose="149.71 -70.61 -85.25 98.14 -24.02 70.61 -11.72 11.72 -20.51 29 34.86 -52.73 18.75 -19.04 0 8.79 0" />
@@ -914,18 +915,18 @@
       <param compileSize="1" acceleration="32" softness="4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 5" />
       <steps>
         <step frame="0" pose="0 0 -68.36 68.36 0 0 0 0 -24.61 24.61 27.35 -27.35 12.3 -12.3 0 0 0" />
-        <step frame="19" pose="0 0 -68.36 68.36 0 0 0 0 -24.61 24.61 27.35 -27.35 12.3 -12.3 0 0 -60" />
-        <step frame="38" pose="0 0 -68.36 68.36 0 0 0 0 -24.61 24.61 27.35 -27.35 12.3 -12.3 0 0 -60" />
-        <step frame="58" pose="0 0 -68.36 68.36 0 0 0 0 -24.61 24.61 27.35 -27.35 12.3 -12.3 0 0 0" />
+        <step frame="19" pose="0 0 -68.36 68.36 0 0 0 0 -24.61 24.61 27.35 -27.35 12.3 -12.3 0 0 -75" />
+        <step frame="58" pose="0 0 -68.36 68.36 0 0 0 0 -24.61 24.61 27.35 -27.35 12.3 -12.3 0 0 -75" />
+        <step frame="77" pose="0 0 -68.36 68.36 0 0 0 0 -24.61 24.61 27.35 -27.35 12.3 -12.3 0 0 0" />
       </steps>
     </Page>
     <Page name="左見ろ">
       <param compileSize="1" acceleration="32" softness="4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 5" />
       <steps>
         <step frame="0" pose="0 0 -68.36 68.36 0 0 0 0 -24.61 24.61 27.35 -27.35 12.3 -12.3 0 0 0" />
-        <step frame="19" pose="0 0 -68.36 68.36 0 0 0 0 -24.61 24.61 27.35 -27.35 12.3 -12.3 0 0 60" />
-        <step frame="38" pose="0 0 -68.36 68.36 0 0 0 0 -24.61 24.61 27.35 -27.35 12.3 -12.3 0 0 60" />
-        <step frame="58" pose="0 0 -68.36 68.36 0 0 0 0 -24.61 24.61 27.35 -27.35 12.3 -12.3 0 0 0" />
+        <step frame="19" pose="0 0 -68.36 68.36 0 0 0 0 -24.61 24.61 27.35 -27.35 12.3 -12.3 0 0 75" />
+        <step frame="58" pose="0 0 -68.36 68.36 0 0 0 0 -24.61 24.61 27.35 -27.35 12.3 -12.3 0 0 75" />
+        <step frame="77" pose="0 0 -68.36 68.36 0 0 0 0 -24.61 24.61 27.35 -27.35 12.3 -12.3 0 0 0" />
       </steps>
     </Page>
   </PageRoot>
@@ -984,6 +985,7 @@
         <callFlow callIndex="42" subIndex="0" exitIndex="0" flow="乗馬ダンス" />
         <callFlow callIndex="43" subIndex="0" exitIndex="0" flow="右見ろ" />
         <callFlow callIndex="44" subIndex="0" exitIndex="0" flow="左見ろ" />
+        <callFlow callIndex="45" subIndex="0" exitIndex="0" flow="早い先進 2" />
       </callFlows>
     </Bucket>
   </BucketRoot>
