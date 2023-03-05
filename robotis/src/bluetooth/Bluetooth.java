@@ -9,7 +9,7 @@ import javax.bluetooth.UUID;
 import javax.microedition.io.Connector;
 import javax.microedition.io.StreamConnection;
 
-import robotis.Robotis;
+import util.Util;
 
 public class Bluetooth extends Bluecove {
 	public StreamConnection stream;
@@ -17,40 +17,60 @@ public class Bluetooth extends Bluecove {
 	private InputStream input;
 	public String address;
 	public String name;
-	public String url;
-
+	public RemoteDevice device;
+	
 	public Bluetooth() {
 		super();
 	}
 
-	public boolean open(String prefix, String SERVICE_UUID) throws Exception {
-		if( ! localDevice()) return false;
-		String uuid = SERVICE_UUID.replace("-", "");
-		UUID uuids[] = new UUID[] { new UUID(uuid, false) };
+	public boolean detect(String prefix) throws Exception {
+		if( ! localDevice()) {
+			return false;
+		}
+		if(this.device != null) {
+			return true;
+		}
 		try {
-			for(RemoteDevice device : devices(prefix)) {
-				Vector<String> urls = services(device, uuids); 
-				for (String url : urls) {
-					this.stream = (StreamConnection) Connector.open(url, Connector.READ_WRITE);
-					if(this.stream != null) {
-						this.output = this.stream.openOutputStream();
-						this.input = this.stream.openInputStream();
-						this.name = device.getFriendlyName(true);
-						this.address = device.getBluetoothAddress();
-						this.url = url;
-						Robotis.instance.println("Open " + this.url);
-						//Robotis.info("name", this.name);
-						return true;
-					}
-				}
+			Vector<RemoteDevice> devices = devices(prefix);
+			if(devices.size() > 0) {
+				device = devices.get(0);
+				name = device.getFriendlyName(true);
+				address = device.getBluetoothAddress();
+				return true;
 			}
 		} catch (Exception e) {
-			Robotis.instance.error("bluetooth.open.", e);
+			Util.error("bluetooth.open.", e);
 		}
-		Robotis.instance.println("No device");
+		Util.println("No device");
 		return false;
 	}
 
+	public boolean open(String SERVICE_UUID) throws Exception {
+		if(device == null) {
+			return false;
+		}
+		if(this.stream != null) {
+			return true;
+		}
+		try {
+			String uuid = SERVICE_UUID.replace("-", "");
+			UUID uuids[] = new UUID[] { new UUID(uuid, false) };
+			Vector<String> urls = services(device, uuids);
+			for (String url : urls) {
+				this.stream = (StreamConnection) Connector.open(url, Connector.READ_WRITE);
+				if(this.stream != null) {
+					this.output = this.stream.openOutputStream();
+					this.input = this.stream.openInputStream();
+					Util.println("Open " + url);
+					//Robotis.info("name", this.name);
+					return true;
+				}
+			}
+		} catch (Exception e) {
+			Util.error("bluetooth.open.", e);
+		}
+		return false;
+	}
 
 	public void close() throws Exception {
 		if(this.output != null) {
@@ -58,7 +78,7 @@ public class Bluetooth extends Bluecove {
 				this.output.close();
 				this.output = null;
 			} catch (Exception e) {
-				Robotis.instance.error("bluetooth.close", e);
+				Util.error("bluetooth.close", e);
 			}
 		}
 		if(this.input != null) {
@@ -66,7 +86,7 @@ public class Bluetooth extends Bluecove {
 				this.input.close();
 				this.input = null;
 			} catch (Exception e) {
-				Robotis.instance.error("bluetooth.close", e);
+				Util.error("bluetooth.close", e);
 			}
 		}
 		if (this.stream != null) {
@@ -74,7 +94,7 @@ public class Bluetooth extends Bluecove {
 				this.stream.close();
 				this.stream = null;
 			} catch (Exception e) {
-				Robotis.instance.error("bluetooth.close", e);
+				Util.error("bluetooth.close", e);
 			}
 		}
 	}

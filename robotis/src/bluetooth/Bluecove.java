@@ -1,7 +1,5 @@
 package bluetooth;
 
-
-import java.util.Properties;
 import java.util.Vector;
 
 import javax.bluetooth.DeviceClass;
@@ -12,7 +10,6 @@ import javax.bluetooth.RemoteDevice;
 import javax.bluetooth.ServiceRecord;
 import javax.bluetooth.UUID;
 
-import robotis.Robotis;
 import util.Util;
 
 public class Bluecove  implements DiscoveryListener {
@@ -40,15 +37,15 @@ public class Bluecove  implements DiscoveryListener {
 	
 	public boolean localDevice() throws Exception {
 		if( ! LocalDevice.isPowerOn()) {
-			Robotis.instance.error("bluecove.localDevice", "PowerOff");
+			Util.error("bluecove.localDevice", "PowerOff");
 			return false;
 		}
 		if(localDevice == null) {
-			Robotis.instance.error("bluecove.localDevice", "No LocalDevice");
+			Util.error("bluecove.localDevice", "No LocalDevice");
 			return false;
 		}
 		if(agent == null) {
-			Robotis.instance.error("bluecove.localDevice", "No DiscoveryAgent");
+			Util.error("bluecove.localDevice", "No DiscoveryAgent");
 			return false;
 		}
 		return true;
@@ -67,7 +64,7 @@ public class Bluecove  implements DiscoveryListener {
 			try {
 				lock.wait();
 			} catch (InterruptedException e) {
-				Robotis.instance.error("bluecove.devices", e);
+				Util.error("bluecove.devices", e);
 			}
 		}
 		return devices;
@@ -76,7 +73,7 @@ public class Bluecove  implements DiscoveryListener {
 	@Override
 	public void deviceDiscovered(RemoteDevice btDevice, DeviceClass cod) {
 		try {
-			Robotis.instance.println("Find " + btDevice.getBluetoothAddress());
+			Util.println("Find " + btDevice.getBluetoothAddress());
 		} catch (Exception e) {
 			// NONE
 		}
@@ -105,11 +102,11 @@ public class Bluecove  implements DiscoveryListener {
 			break;
 
 		case DiscoveryListener.INQUIRY_TERMINATED:
-			Robotis.instance.info("bluecove.inquiryCompleted",  "INQUIRY_TERMINATED");
+			Util.info("bluecove.inquiryCompleted",  "INQUIRY_TERMINATED");
 			break;
 
 		case DiscoveryListener.INQUIRY_ERROR:
-			Robotis.instance.info("bluecove.inquiryCompleted",  "INQUIRY_ERROR");
+			Util.info("bluecove.inquiryCompleted",  "INQUIRY_ERROR");
 			break;
 
 		default:
@@ -123,13 +120,13 @@ public class Bluecove  implements DiscoveryListener {
 
 	protected Vector<String> services(RemoteDevice rd, UUID uuids[]) throws Exception {
 		services = new Vector<String>();
-		Robotis.instance.println("Detect " + rd.getFriendlyName(false));
+		Util.println("Detect " + rd.getFriendlyName(false));
 		agent.searchServices(null, uuids, rd, this);
 		synchronized (lock) {
 			try {
 				lock.wait();
 			} catch (InterruptedException e) {
-				Robotis.instance.error("bluecove.services", e);
+				Util.error("bluecove.services", e);
 			}
 		}
 		return services;
@@ -140,7 +137,7 @@ public class Bluecove  implements DiscoveryListener {
 		for (ServiceRecord sr : servRecord) {
 			String url = sr.getConnectionURL(ServiceRecord.NOAUTHENTICATE_NOENCRYPT, false);
 			services.add(url);
-			Robotis.instance.info("bluecove.servicesDiscovered",  url);
+			Util.info("bluecove.servicesDiscovered",  url);
 		}
 	}
 
@@ -153,20 +150,25 @@ public class Bluecove  implements DiscoveryListener {
 	}
 
 	public static void main(String[] args) {
-		String PROPFILE = "robotis.properties";
+		System.out.println(Util.sec() + " start");
+		//String PROPFILE = "robotis.properties";
 		String BT_PREFIX = "ROBOTIS";
 		String BT_UUID = "00001101-0000-1000-8000-00805F9B34FB";
 		try {
-			Properties properties = Util.loadProperties(PROPFILE);
+			//Properties properties = Util.loadProperties(PROPFILE);
 			Bluetooth bluecove = new Bluetooth();
-			if(bluecove.open(BT_PREFIX, BT_UUID)) {
+			System.out.println(Util.sec() + " detect");
+			bluecove.detect(BT_PREFIX);
+			System.out.println(Util.sec() + " open");
+			if(bluecove.open(BT_UUID)) {
 				System.out.println("Connect successful");
 			}
+			System.out.println(Util.sec() + " close");
 			if(bluecove.stream != null) {
 				bluecove.stream.close();
 				System.out.println("close connection");
 			}
-			Util.saveProperties(PROPFILE, properties);
+			//Util.saveProperties(PROPFILE, properties);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

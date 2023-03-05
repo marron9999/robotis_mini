@@ -39,17 +39,17 @@
 }
 
 @keyframes logoa {
-   0% { background-image: url(./1.png); }
-  10% { background-image: url(./2.png); }
-  20% { background-image: url(./1.png); }
-  30% { background-image: url(./3.png); }
-  40% { background-image: url(./4.png); }
-  50% { background-image: url(./3.png); }
-  60% { background-image: url(./5.png); }
-  70% { background-image: url(./3.png); }
-  80% { background-image: url(./3.png); }
-  90% { background-image: url(./2.png); }
- 100% { background-image: url(./1.png); }
+   0% { background-image: url(img/1.png); }
+  10% { background-image: url(img/2.png); }
+  20% { background-image: url(img/1.png); }
+  30% { background-image: url(img/3.png); }
+  40% { background-image: url(img/4.png); }
+  50% { background-image: url(img/3.png); }
+  60% { background-image: url(img/5.png); }
+  70% { background-image: url(img/3.png); }
+  80% { background-image: url(img/3.png); }
+  90% { background-image: url(img/2.png); }
+ 100% { background-image: url(img/1.png); }
 }
 
 #motion {
@@ -60,7 +60,9 @@
 	height: calc(100% - 61px);
 }
 
-#motion td {
+#motion td.m,
+#motion td.s,
+#motion td.n {
 	margin-top: 10px;
 	margin-left: 10px;
 	border: 1px solid gray;
@@ -70,6 +72,13 @@
 	text-align: center;
 	height: 2em;
 	cursor: pointer;
+}
+#head table,
+#motion table table,
+#head table td,
+#motion table table td {
+	margin: 0;
+	padding: 0;
 }
 #loga {
 	position: absolute;
@@ -113,28 +122,32 @@
 	padding: 2px 4px;
 }
 
-#open, #close, #reset, .m, .n, .s {
+#open, #close, #reset, .m, .n, .s, .t {
 	font-size: 18px;
 	line-height: 18px;
 	margin-left: 10px;
 	vertical-align: middle;
 	word-break: break-all;
 }
-
 .n {
 	cursor: default;
 	color: #bbb;
 	background: #ddd;
 }
-
 .s {
 	background: #fcc;
+}
+.i {
+	vertical-align: middle;
+}
+.t {
+	vertical-align: middle;
 }
 
 #open, #close, #reset {
 	border: 1px solid gray;
-	padding: 4px 12px;
-	padding-top: 6px;
+	padding: 1px 6px;
+	padding-top: 4px;
 	border-radius: 8px;
 	display: none;
 	cursor: pointer;
@@ -145,4 +158,11 @@ r {
 }
 n {
 	color: black;
+}
+
+img.i {
+	height: 22px;
+	width: auto;
+	vertical-align: baseline;
+	margin-right: 5px;
 }

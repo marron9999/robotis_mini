@@ -4,6 +4,7 @@ import java.awt.event.KeyEvent;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStreamReader;
+import java.io.PrintStream;
 import java.util.Properties;
 
 import org.w3c.dom.NamedNodeMap;
@@ -219,4 +220,56 @@ public class Util {
 //		}
 //		return data;
 //	}
+
+	public static boolean VERBOSE = false;
+	public static PrintStream out = System.out;
+	public static PrintStream ps;
+
+	public static void info(String arg1, String arg2) {
+		println("[I] " + arg1 + ": " + arg2);
+	}
+
+	public static void error(String arg1, String arg2) {
+		println("[E] " + arg1 + ": " + arg2);
+	}
+
+	public static void error(String arg1, Exception e) {
+		println("[E] " + arg1 + ": " + e.getMessage());
+	}
+
+	public static void print(String str)  {
+		if(str.length() > 0) {
+			out.print(str);
+			if(ps != null)
+				ps.print(str);
+		}
+	}
+	public static void println(String str)  {
+		if(str.length() > 0) {
+			out.println(str);
+			if(ps != null)
+				ps.println(str);
+		}
+	}
+	public static void println()  {
+		out.println();
+		if(ps != null)
+			ps.println();
+	}
+
+	public static void verbose(String str)  {
+		if(VERBOSE) {
+			print(str);
+		}
+	}
+	public static void verboseln(String str)  {
+		if(VERBOSE) {
+			println(str);
+		}
+	}
+	public static void verboseln()  {
+		if(VERBOSE) {
+			println();
+		}
+	}
 }

@@ -45,7 +45,7 @@ function _connect() {
 	E("open").style.display = "none";
 	E("log").innerHTML = "";
 	mc = 0;
-	message("Search robotis");
+	message("Connect robotis");
 	ws.send("open");
 }
 function _disconnect() {
@@ -111,7 +111,9 @@ function motions(m) {
 	let s = "";
 	for(p = 0; p<m.length; p++)
 		s += "<n>" + m[p] + "</n>";
-	ns += "<td class=m id=m" + o + " onclick='_motion(this)'>" + s + "</td>";
+	ns += "<td class=m id=m" + o + " onclick='_motion(this)'>";
+	ns += "<table border=0><tr><td><img class=i src=icon/" + o + ".png></td>";
+	ns += "<td class=t id=t" + o + ">" + s + "</td></tr></table></td>";
 	_motions[o] = m;
 }
 
@@ -147,7 +149,12 @@ function _voice() {
 
 function _resete(ee, c) {
 	if(c == undefined) c = "m";
-	ee.className = c;
+	let bb = ee;
+	if(ee.id.charAt(0) == 't')
+		bb = E(ee.id.replace("t", "m"));
+	else 
+		ee = E(ee.id.replace("m", "t"));
+	bb.className = c;
 	let m = ee.textContent;
 	let s = "";
 	if(c == "s") {
@@ -162,7 +169,7 @@ function _resete(ee, c) {
 function _reset(c) {
 	if(c == undefined) c = "m";
 	for(let ei = 0; ; ei ++) {
-		let ee = E("m" + ei);
+		let ee = E("t" + ei);
 		if(ee == null) break;
 		_resete(ee, c);
 	}
@@ -197,7 +204,12 @@ let modify = {
 	"規律" : "起立",
 	"キリツ" : "起立",
 	"見る" : "見ろ",
+	"ミロ" : "見ろ",
 	"止ま" : "停止",
+	"クック" : "フック",
+	"ジャム" : "ジャブ",
+	"じゃあ" : "ジャブ",
+	"嫉妬" : "シット",
 	" " : "",
 }
 
@@ -244,6 +256,7 @@ function _recognition(s) {
 	if(s.indexOf("接続") >= 0) {
 		if(E("open").style.display != "none") {
 			recognition.parse = function() {};
+			recognition.abort();
 			_reset();
 			message("接続");
 			_connect();
@@ -253,6 +266,7 @@ function _recognition(s) {
 	if(s.indexOf("切断") >= 0) {
 		if(E("close").style.display != "none") {
 			recognition.parse = function() {};
+			recognition.abort();
 			_reset();
 			message("切断");
 			_disconnect();
@@ -269,7 +283,7 @@ function _recognition(s) {
 						_resete(es[ej], "n");
 					}
 				}
-				es[ei].className = "s";
+				E(es[ei].id.replace("t", "m")).className = "s";
 			} else {
 				if(b) {	
 					_resete(es[ei], "n");
@@ -280,7 +294,7 @@ function _recognition(s) {
 	let ess = [];
 	let ems = [];
 	for(let ei = 0; ; ei ++) {
-		let ee = E("m" + ei);
+		let ee = E("t" + ei);
 		if(ee == null) break;
 		ems[ei] = ee;
 		if(ee.className == "s")
@@ -296,6 +310,7 @@ function _recognition(s) {
 		for(let ei = 0; ei<ess.length; ei ++) {
 			if(ess[ei].innerHTML.indexOf("<n>") < 0) {
 				recognition.parse = function() {};
+				recognition.abort();
 				let ee = ess[ei];
 				_reset("n");
 				_resete(ee, "s");
@@ -305,6 +320,7 @@ function _recognition(s) {
 		}
 		if(ess.length == 1) {
 			recognition.parse = function() {};
+			recognition.abort();
 			let ee = ess[0];
 			_reset("n");
 			_resete(ee, "s");

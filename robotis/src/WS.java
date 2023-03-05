@@ -18,7 +18,7 @@ import util.Util;
 
 @ServerEndpoint("/ws")
 public class WS {
-	public static Robotis robotis = null;
+	private static Robotis robotis = Robotis.instance;
 	private static Session session;
 	private ExecutorService service = Executors.newCachedThreadPool();
 
@@ -41,37 +41,31 @@ public class WS {
 		}
 	}
 
-
 	@OnOpen
 	public void onOpen(Session session) {
 		//System.out.println("onOpen: " + session.toString());
-		if(robotis == null
-		|| robotis.bluetooth == null) {
-			robotis = new Robotis();
-			try {
-				robotis.out = new PrintStream(new OutputStream() {
-					@Override
-					public void write(byte b[], int off, int len) throws IOException {
-						WS.notify(session, new String(b, off, len, "utf-8"));
-					}
-					@Override
-					public void write(byte b[]) throws IOException {
-						WS.notify(session, new String(b, "utf-8"));
-					}
-					@Override
-					public void write(int b) throws IOException {
-						WS.notify(session, String.valueOf(b));
-					}
-				}, true, "utf-8");
-			} catch (Exception e) {
-				// NONE
-			}
-			//initialize();
+		try {
+			Util.out = new PrintStream(new OutputStream() {
+				@Override
+				public void write(byte b[], int off, int len) throws IOException {
+					WS.notify(session, new String(b, off, len, "utf-8"));
+				}
+				@Override
+				public void write(byte b[]) throws IOException {
+					WS.notify(session, new String(b, "utf-8"));
+				}
+				@Override
+				public void write(int b) throws IOException {
+					WS.notify(session, String.valueOf(b));
+				}
+			}, true, "utf-8");
+		} catch (Exception e) {
+			// NONE
 		}
+		//initialize();
 		sendText(session, "ready robotis");
 	}
 
-	
 	private void sendText(Session session, String message) {
 		try {
 			session.getBasicRemote().sendText(message);
@@ -84,19 +78,18 @@ public class WS {
 		@Override
 		public void run() {
 			Session session = WS.session;
-			Thread.currentThread().setName("open_robotis");
+			Thread.currentThread().setName("robotis_initialize");
 			PrintStream _out = System.out;
 			PrintStream _err = System.err;
-			System.setOut(robotis.out);
-			System.setErr(robotis.out);
+			System.setOut(Util.out);
+			System.setErr(Util.out);
 			robotis.initialize();
 			System.setOut(_out);
 			System.setErr(_err);
-
-			try {
-				WS.notify(session, "Connect " + robotis.bluetooth.name + "\n");
-				sendText(session, "connect " + robotis.bluetooth.name);
-			} catch (Exception e) {
+			if(robotis.bluetooth.stream != null) {
+				WS.notify(session, "Connect " + Robotis.instance.bluetooth.name + "\n");
+				sendText(session, "connect " + Robotis.instance.bluetooth.name);
+			} else {
 				WS.notify(session, "Fial connect\n");
 				sendText(session, "disconnect robotis");
 			}
@@ -104,7 +97,6 @@ public class WS {
 			WS.session = null;
 		}
 	}
-
 
 	@OnMessage
 	public void onMessage(String message, Session session) {
@@ -172,8 +164,8 @@ public class WS {
 
 		if(ope[0].equalsIgnoreCase("verbose")) {
 			if(ope[1].equalsIgnoreCase("0"))
-				robotis.VERBOSE = false;
-			else robotis.VERBOSE = true;
+				Util.VERBOSE = false;
+			else Util.VERBOSE = true;
 			return;
 		}
 	}

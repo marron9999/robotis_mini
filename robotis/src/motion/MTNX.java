@@ -13,7 +13,6 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import robotis.Robotis;
 import util.Util;
 
 public class MTNX  {
@@ -130,7 +129,7 @@ public class MTNX  {
 				}
 			}
 		} catch (Exception e) {
-			Robotis.instance.error("MTNX", e);
+			Util.error("MTNX", e);
 		}
 	}
 }

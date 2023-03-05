@@ -13,26 +13,22 @@ import packet.XL320;
 import util.Util;
 
 public class Robotis {
-	public static Robotis instance;
-	public final String PROPFILE = "robotis.properties";
-	public PrintStream out;
-	public PrintStream ps;
-	public Properties properties;
+	public static Robotis instance = new Robotis();
 	public Bluetooth bluetooth;
-	public boolean VERBOSE = false;
+	public static final String PROPFILE = "robotis.properties";
+	public Properties properties;
 	public int internal_sleep = 100;
 	public int timeout_packet = 1000;
 	public int timeout_motion = 3000;
 
 	public void verbose_packet(byte[] buffer, int length)  {
 		String str = PACKET.format(buffer, length);
-		verboseln(str);
+		Util.verboseln(str);
 	}
 
-	public Robotis() {
+	private Robotis() {
 		super();
 		instance = this;
-		out = System.out;
 		properties = new Properties();
 		try {
 			properties = Util.loadProperties(PROPFILE);
@@ -60,6 +56,16 @@ public class Robotis {
 //		try {
 //			CM904.GYRO_Y = Integer.parseInt(properties.getProperty("sensor.gyro.y"));
 //		} catch (Exception e) { }
+		
+		bluetooth = new Bluetooth();
+		 new Thread(new Runnable() {
+			@Override
+			public void run() {
+				Thread.currentThread().setName("Robotis_bluetooth_detect");
+				detect();
+				Thread.currentThread().setName("-");
+			}
+		}).start();
 	}
 
 	public void motion(int no) {
@@ -82,33 +88,43 @@ public class Robotis {
 				}
 			}
 		} catch (Exception e) {
-			error("robotis_motion",  e);
+			Util.error("robotis_motion",  e);
 		}
 	}
 
-	public void initialize() {
-		if(ps == null) {
-			try {
-				String v = properties.getProperty("file.log");
-				ps = new PrintStream(v, "utf-8");
-			} catch (Exception e) {
-				// NONE
-			}
-		}
-		if(bluetooth == null) {
+	public void detect() {
+		synchronized (bluetooth) {
 			try {
 				String prefix = properties.getProperty("bluecove.prefix");
 				//String uuid = properties.getProperty("bluecove.uuid");
 				// Serial Port Profile (SPP)
-				String uuid = "00001101-0000-1000-8000-00805F9B34FB";
-				bluetooth = new Bluetooth();
-				if( ! bluetooth.open(prefix, uuid)) {
-					bluetooth = null;
-				}
+				bluetooth.detect(prefix);
 			} catch (Exception e) {
-				error("Robotis.initialize",  e);
+				Util.error("Robotis.detect",  e);
 			}
-			if(bluetooth != null) {
+		}
+	}
+
+	public void initialize() {
+		if(Util.ps == null) {
+			try {
+				String v = properties.getProperty("file.log");
+				Util.ps = new PrintStream(v, "utf-8");
+			} catch (Exception e) {
+				// NONE
+			}
+		}
+		if(bluetooth.stream == null) {
+			try {
+				if(bluetooth.device == null) {
+					detect(); 
+				}
+				String uuid = "00001101-0000-1000-8000-00805F9B34FB";
+				bluetooth.open(uuid);
+			} catch (Exception e) {
+				Util.error("Robotis.initialize",  e);
+			}
+			if(bluetooth.stream != null) {
 				motion(MOTION.SIT_DOWN, timeout_motion);
 			}
 		}
@@ -116,87 +132,37 @@ public class Robotis {
 
 	public void terminate() {
 		close();
-		if(ps != null) {
-			ps.close();
-			ps = null;
+		if(Util.ps != null) {
+			Util.ps.close();
+			Util.ps = null;
 		}
 	}
 
 	public void close() {
-		if(bluetooth == null) return;
-		synchronized (bluetooth) {
-			try {
-				byte rc = read_byte(CM904.ID, CM904._MotionPlayStatus[0], (byte) 0);
-				if(rc != 0) {
-					motion(MOTION.STOP);
-				}
-				motion(MOTION.SIT_DOWN, timeout_motion);
-			} catch (Exception e) {
-				error("robotis_close",  e);
+		if(bluetooth.stream == null) return;
+		try {
+			byte rc = read_byte(CM904.ID, CM904._MotionPlayStatus[0], (byte) 0);
+			if(rc != 0) {
+				motion(MOTION.STOP);
 			}
+			motion(MOTION.SIT_DOWN, timeout_motion);
+		} catch (Exception e) {
+			Util.error("robotis_close",  e);
 		}
 		try {
 			bluetooth.close();
 		} catch (Exception e) {
-			error("bluetooth_close",  e);
+			Util.error("bluetooth_close",  e);
 		}
-		bluetooth = null;
 	}
 
-	public void info(String arg1, String arg2) {
-		println("[I] " + arg1 + ": " + arg2);
-	}
 
-	public void error(String arg1, String arg2) {
-		println("[E] " + arg1 + ": " + arg2);
-	}
-
-	public void error(String arg1, Exception e) {
-		println("[E] " + arg1 + ": " + e.getMessage());
-	}
-
-	public void print(String str)  {
-		if(str.length() > 0) {
-			out.print(str);
-			if(ps != null)
-				ps.print(str);
-		}
-	}
-	public void println(String str)  {
-		if(str.length() > 0) {
-			out.println(str);
-			if(ps != null)
-				ps.println(str);
-		}
-	}
-	public void println()  {
-		out.println();
-		if(ps != null)
-			ps.println();
-	}
-
-	public void verbose(String str)  {
-		if(VERBOSE) {
-			print(str);
-		}
-	}
-	public void verboseln(String str)  {
-		if(VERBOSE) {
-			println(str);
-		}
-	}
-	public  void verboseln()  {
-		if(VERBOSE) {
-			println();
-		}
-	}
-	
 	public void sleep_timeout(int milliseconds) {
 		long endTime = System.currentTimeMillis() + (long) milliseconds;
 		while (System.currentTimeMillis() < endTime) {
 			try {
-				if (this.bluetooth != null) {
-					if (this.bluetooth.available() > 0) {
+				if (bluetooth.stream != null) {
+					if (bluetooth.available() > 0) {
 						return;
 					}
 				} else {
@@ -209,7 +175,7 @@ public class Robotis {
 	}
 
 //	public void syncread_param(int address, int length, SyncReadParam... syncReadParams) throws Exception {
-//		if (this.bluetooth == null) return;
+//		if (this.bluetooth.stream == null) return;
 //		if( ! this.bluetooth.isWritable()) return;
 //		byte[] buffer = PACKET.buffer_syncread(address, length, syncReadParams);
 //		_print_request(buffer);
@@ -247,12 +213,12 @@ public class Robotis {
 	}
 	private boolean read_length(byte id, int address, int read_length) throws Exception {
 		synchronized (PACKET.write_buffer) {
-			if (this.bluetooth == null) return false;
-			if( ! this.bluetooth.isWritable()) return false;
+			if (bluetooth.stream == null) return false;
+			if( ! bluetooth.isWritable()) return false;
 			int length = PACKET.buffer_read(id, address, read_length);
 			verbose_packet(PACKET.write_buffer, length);
-			this.bluetooth.clear();
-			this.bluetooth.write(PACKET.write_buffer, length);
+			bluetooth.clear();
+			bluetooth.write(PACKET.write_buffer, length);
 			sleep_timeout(internal_sleep);
 			return PACKET.read_status();
 		}
@@ -260,31 +226,31 @@ public class Robotis {
 
 	public boolean write_byte(byte id, int address, byte value) throws Exception {
 		synchronized (PACKET.write_buffer) {
-			if (this.bluetooth == null) return false;
-			if( ! this.bluetooth.isWritable()) return false;
+			if (bluetooth.stream == null) return false;
+			if( ! bluetooth.isWritable()) return false;
 			int length = PACKET.buffer_write_byte(id, address, value);
 			verbose_packet(PACKET.write_buffer, length);
-			this.bluetooth.clear();
-			this.bluetooth.write(PACKET.write_buffer, length);
+			bluetooth.clear();
+			bluetooth.write(PACKET.write_buffer, length);
 			sleep_timeout(internal_sleep);
 			return PACKET.read_status();
 		}
 	}
 	public boolean write_word(byte id, int address, int value) throws Exception {
 		synchronized (PACKET.write_buffer) {
-			if (this.bluetooth == null) return false;
-			if( ! this.bluetooth.isWritable()) return false;
+			if (bluetooth.stream == null) return false;
+			if( ! bluetooth.isWritable()) return false;
 			int length = PACKET.buffer_write_word(id, address, value);
 			verbose_packet(PACKET.write_buffer, length);
-			this.bluetooth.clear();
-			this.bluetooth.write(PACKET.write_buffer, length);
+			bluetooth.clear();
+			bluetooth.write(PACKET.write_buffer, length);
 			sleep_timeout(internal_sleep);
 			return PACKET.read_status();
 		}
 	}
 
 //	public void syncwrite_param(int address, SyncWriteParam... syncWriteParams) throws Exception {
-//		if(this.bluetooth == null) return;
+//		if(this.bluetooth.stream == null) return;
 //		if( ! this.bluetooth.isWritable()) return;
 //		if(syncWriteParams.length <= 0) return;
 //		byte[] buffer = PACKET.buffer_syncwrite(address, syncWriteParams);

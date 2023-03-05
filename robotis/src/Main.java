@@ -1,7 +1,7 @@
 import packet.MOTION;
 import robotis.Robotis;
 
-public class Main extends Robotis{
+public class Main {
 
 //	class Area {
 //		int address; int length; String name;
@@ -35,25 +35,26 @@ public class Main extends Robotis{
 //	}
 	
 	public void run() throws Exception {
-		initialize();
+		Robotis rbotis = Robotis.instance;
+		rbotis.initialize();
 
-		motion(MOTION.GET_UP);
-		motion(MOTION.INIT_POS);
-		sleep_timeout(timeout_packet);
+		rbotis.motion(MOTION.GET_UP);
+		rbotis.motion(MOTION.INIT_POS);
+		rbotis.sleep_timeout(rbotis.timeout_packet);
 
 		int no = 2;
-		String s = properties.getProperty("motion." + no, null);
+		String s = rbotis.properties.getProperty("motion." + no, null);
 		while(s != null) {
 			System.out.println(no + " " + s);
-			motion(no);
-			motion(MOTION.STOP);
-			motion(MOTION.INIT_POS);
-			sleep_timeout(timeout_packet);
+			rbotis.motion(no);
+			rbotis.motion(MOTION.STOP);
+			rbotis.motion(MOTION.INIT_POS);
+			rbotis.sleep_timeout(rbotis.timeout_packet);
 			no++;
-			s = properties.getProperty("motion." + no, null);
+			s = rbotis.properties.getProperty("motion." + no, null);
 		}
 
-		terminate();
+		rbotis.terminate();
 	}
 
 
